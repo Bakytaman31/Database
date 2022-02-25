@@ -28,7 +28,7 @@ public class Employee {
         Fname = new SimpleStringProperty(fname);
         Lname = new SimpleStringProperty(lname);
         Ssn = new SimpleStringProperty(ssn);
-        Bdate = new SimpleObjectProperty<Date>(bdate);
+        Bdate = new SimpleObjectProperty<>(bdate);
         Address = new SimpleStringProperty(address);
         Sex = new SimpleStringProperty(sex);
         Salary = new SimpleDoubleProperty(salary);

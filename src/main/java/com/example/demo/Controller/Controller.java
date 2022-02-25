@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
@@ -62,6 +61,7 @@ public class Controller {
         sexColumn.setCellValueFactory(cellData -> cellData.getValue().sexProperty());
         actionColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue()));
 
+
         initializeTableValues();
 
         actionColumn.setCellFactory(param -> new TableCell<Employee, Employee>() {
@@ -81,6 +81,10 @@ public class Controller {
                 deleteButton.setOnAction(event -> removePerson(employee.getSsn()));
             }
         });
+        employeeTable.setOnMouseClicked(mouseEvent -> {
+            System.out.println(employeeTable.getSelectionModel().getSelectedItem().getSsn());
+        });
+
     }
 
     public void removePerson(String ssn) {
@@ -156,6 +160,7 @@ public class Controller {
      */
     public void initializeTableValues(){
         ObservableList<Employee> personList = repository.getList();
+        System.out.println(personList);
         if(personList.size() > 0){
             employeeTable.setItems(personList);
         }
