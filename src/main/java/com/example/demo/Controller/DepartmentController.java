@@ -132,7 +132,7 @@ public class DepartmentController {
     public void initializeTableValues(){
         ObservableList<Department> departmentsList = repository.getList();
         if(departmentsList.size() > 0){
-            departmentTable.setItems(departmentList);
+            departmentTable.setItems(departmentsList);
         }
     }
 }
