@@ -54,7 +54,7 @@ public class DepartmentController {
         initializeTableValues();
 
 
-        actionColumn.setCellFactory(param -> new TableCell<>() {
+        actionColumn.setCellFactory(param -> new TableCell<Department, Department>() {
             private final Button deleteButton = new Button("Delete");
 
             @Override
@@ -80,7 +80,7 @@ public class DepartmentController {
     public void removeDepartment(String ssn) {
         try {
             Statement statement=connection.createStatement();
-            String sql = "DELETE FROM department WHERE ssn = '" + ssn + "'";
+            String sql = "DELETE FROM department WHERE Mgr_ssn = '" + ssn + "'";
             statement.executeUpdate(sql);
 
             System.out.println("Success!");
