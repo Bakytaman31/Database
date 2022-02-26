@@ -1,23 +1,31 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Connection.ConnectionClass;
+import com.example.demo.Main;
 import com.example.demo.Model.Employee;
 import com.example.demo.Repository.EmployeeRepository;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.Objects;
 
 
 public class Controller {
     final EmployeeRepository repository = new EmployeeRepository();
+    public static String ssn;
 
     @FXML
     public TableView<Employee> employeeTable;
@@ -64,8 +72,10 @@ public class Controller {
 
         initializeTableValues();
 
-        actionColumn.setCellFactory(param -> new TableCell<Employee, Employee>() {
+        actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button deleteButton = new Button("Delete");
+            private final Button updateButton = new Button("Update");
+            private final HBox pane = new HBox(deleteButton, updateButton);
 
             @Override
             protected void updateItem(Employee employee, boolean empty) {
@@ -76,15 +86,15 @@ public class Controller {
                     return;
                 }
 
-                setGraphic(deleteButton);
+                setGraphic(pane);
 
                 deleteButton.setOnAction(event -> removePerson(employee.getSsn()));
+                updateButton.setOnAction(event -> {
+                    openEmployeeRemakePage(event);
+                    ssn = employee.getSsn();
+                });
             }
         });
-        employeeTable.setOnMouseClicked(mouseEvent -> {
-            System.out.println(employeeTable.getSelectionModel().getSelectedItem().getSsn());
-        });
-
     }
 
     public void removePerson(String ssn) {
@@ -101,26 +111,9 @@ public class Controller {
         initializeTableValues();
     }
 
-    /**
-     * Следующие строки предназначены для создания объекта класса -ConnectionClass-
-     * и вызова его метода -getConnection()-
-     * Переменная -connection- далее используется для отправки запросов на базу данных
-     */
     ConnectionClass connectionClass = new ConnectionClass();
     Connection connection = connectionClass.getConnection();
 
-    public ObservableList<Employee> employeeList = FXCollections.observableArrayList();
-
-    /**
-     * Метод -insertPerson(ActionEvent actionEvent)- привязан к кнопке -Создать- на главной странице
-     * при нажатии которой из текста полей -Fname, Lname, Ssn...- формируется
-     * запрос добавления(INSERT) в базу данных.
-     *
-     * Далее значения полей опустошаются и вызывается метод
-     * -initializeTableValues();- для заполнения таблицы новыми данными из Базы данных.
-     *
-     * @param actionEvent
-     */
     public void insertPerson(ActionEvent actionEvent) {
         try {
             Statement statement=connection.createStatement();
@@ -151,18 +144,22 @@ public class Controller {
         initializeTableValues();
     }
 
-
-
-
-    /**
-     * Данный метод делает запрос -SELECT- в базу данных и из полученных данных формирует список
-     * типа -ObservableList<Employee>-, с помощью которого заполняет таблицу -personTable-
-     */
     public void initializeTableValues(){
         ObservableList<Employee> personList = repository.getList();
         System.out.println(personList);
         if(personList.size() > 0){
             employeeTable.setItems(personList);
+        }
+    }
+
+    public void openEmployeeRemakePage(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("employeeRemake.fxml")));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

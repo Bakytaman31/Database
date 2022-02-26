@@ -5,7 +5,6 @@ import com.example.demo.Main;
 import com.example.demo.Model.Department;
 import com.example.demo.Repository.DepartmentRepository;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -63,7 +62,7 @@ public class DepartmentController {
         initializeTableValues();
 
 
-        actionColumn.setCellFactory(param -> new TableCell<Department, Department>() {
+        actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button deleteButton = new Button("Delete");
             private final Button updateButton = new Button("Update");
             private final HBox pane = new HBox(deleteButton, updateButton);
@@ -105,8 +104,6 @@ public class DepartmentController {
 
     ConnectionClass connectionClass = new ConnectionClass();
     Connection connection = connectionClass.getConnection();
-
-    public ObservableList<Department> departmentList = FXCollections.observableArrayList();
 
     public void insertDepartment(ActionEvent actionEvent) {
         try {
