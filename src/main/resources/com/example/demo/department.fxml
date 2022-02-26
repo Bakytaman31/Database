@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" fx:controller="com.example.demo.Controller.DepartmentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.Controller.DepartmentController">
     <children>
         <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -42,11 +42,11 @@
                             <children>
                                 <TableView fx:id="departmentTable" prefHeight="375.0" prefWidth="600.0">
                                     <columns>
-                                        <TableColumn fx:id="dNameColumn" prefWidth="100.0" text="Имя" />
-                                        <TableColumn fx:id="dNumberColumn" prefWidth="100.0" text="Номер" />
-                                        <TableColumn fx:id="ssnColumn" prefWidth="100.0" text="Ssn" />
-                                        <TableColumn fx:id="dateColumn" prefWidth="100.0" text="Дата " />
-                                        <TableColumn fx:id="actionColumn" prefWidth="50.0" text=" Действия" />
+                                        <TableColumn fx:id="dNameColumn" prefWidth="144.0" text="Имя" />
+                                        <TableColumn fx:id="dNumberColumn" prefWidth="129.0" text="Номер" />
+                                        <TableColumn fx:id="ssnColumn" prefWidth="108.0" text="Ssn" />
+                                        <TableColumn fx:id="dateColumn" prefWidth="111.0" text="Дата " />
+                                        <TableColumn fx:id="actionColumn" prefWidth="107.0" text=" Действия" />
                                     </columns>
                                 </TableView>
                             </children>

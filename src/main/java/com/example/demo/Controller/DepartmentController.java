@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Connection.ConnectionClass;
+import com.example.demo.Main;
 import com.example.demo.Model.Department;
 import com.example.demo.Repository.DepartmentRepository;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -8,23 +9,31 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.Objects;
 
 
 public class DepartmentController {
     final DepartmentRepository repository = new DepartmentRepository();
+    public static String ssn;
 
     @FXML
     public TableView<Department> departmentTable;
     @FXML
     public TableColumn<Department, String> dNameColumn;
     @FXML
-    public TableColumn<Department, Integer> dNumberColumn;
+    public TableColumn<Department, Number> dNumberColumn;
     @FXML
     public TableColumn<Department, String> ssnColumn;
     @FXML
@@ -46,7 +55,7 @@ public class DepartmentController {
     private void initialize(){
 
         dNameColumn.setCellValueFactory(cellData -> cellData.getValue().dnameProperty());
-//        dNumberColumn.setCellValueFactory(cellData -> cellData.getValue().dnumberProperty());
+        dNumberColumn.setCellValueFactory(cellData -> cellData.getValue().dnumberProperty());
         ssnColumn.setCellValueFactory(cellData -> cellData.getValue().mgr_ssnProperty());
         dateColumn.setCellValueFactory(cellData -> cellData.getValue().mgr_start_dateProperty());
         actionColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue()));
@@ -56,6 +65,8 @@ public class DepartmentController {
 
         actionColumn.setCellFactory(param -> new TableCell<Department, Department>() {
             private final Button deleteButton = new Button("Delete");
+            private final Button updateButton = new Button("Update");
+            private final HBox pane = new HBox(deleteButton, updateButton);
 
             @Override
             protected void updateItem(Department department, boolean empty) {
@@ -66,15 +77,15 @@ public class DepartmentController {
                     return;
                 }
 
-                setGraphic(deleteButton);
+                setGraphic(pane);
 
                 deleteButton.setOnAction(event -> removeDepartment(department.getMgr_ssn()));
+                updateButton.setOnAction(event -> {
+                    openDepartmentRemakePage(event);
+                    ssn = department.getMgr_ssn();
+                });
             }
         });
-        departmentTable.setOnMouseClicked(mouseEvent -> {
-            System.out.println(departmentTable.getSelectionModel().getSelectedItem().getMgr_ssn());
-        });
-
     }
 
     public void removeDepartment(String ssn) {
@@ -123,16 +134,21 @@ public class DepartmentController {
     }
 
 
-
-
-    /**
-     * Данный метод делает запрос -SELECT- в базу данных и из полученных данных формирует список
-     * типа -ObservableList<Employee>-, с помощью которого заполняет таблицу -personTable-
-     */
     public void initializeTableValues(){
         ObservableList<Department> departmentsList = repository.getList();
         if(departmentsList.size() > 0){
             departmentTable.setItems(departmentsList);
+        }
+    }
+
+    public void openDepartmentRemakePage(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("departmentRemake.fxml")));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
